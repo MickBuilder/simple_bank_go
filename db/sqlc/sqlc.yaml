@@ -5,8 +5,8 @@ sql:
     schema: "../migration"
     gen:
       go:
-        package: "repositories"
-        out: "repositories"
+        package: "db"
+        out: "repository"
         sql_package: "pgx/v5"
         emit_interface: true
         overrides:
