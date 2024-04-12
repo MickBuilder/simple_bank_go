@@ -16,10 +16,13 @@ migratedown:
 sqlc:
 	sqlc generate -f db/sqlc/sqlc.yaml
 
+mock:
+	mockgen -package mockdb -destination db/mock/repository.go learning.com/golang_backend/db/sqlc/repository Repository
+
 test:
 	go test -v -cover -short ./...
 
 server:
 	go run main.go
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc
+.PHONY: postgres createdb dropdb migrateup migratedown sqlc mock test server
