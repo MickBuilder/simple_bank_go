@@ -1,9 +1,11 @@
 package api
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 	db "learning.com/golang_backend/db/sqlc/repository"
 )
 
@@ -52,6 +54,11 @@ func (server Server) getAccount(ctx *gin.Context) {
 
 	account, err := server.repository.GetAccount(ctx, path.Id)
 	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
