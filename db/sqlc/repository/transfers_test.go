@@ -48,7 +48,7 @@ func TestGetTransfer(t *testing.T) {
 	require.Equal(t, expected.FromAccountID, result.FromAccountID)
 	require.Equal(t, expected.ToAccountID, result.ToAccountID)
 	require.Equal(t, expected.Amount, result.Amount)
-	require.WithinDuration(t, expected.CreatedAt.Time, result.CreatedAt.Time, time.Second)
+	require.WithinDuration(t, expected.CreatedAt, result.CreatedAt, time.Second)
 }
 
 func TestListTransfers(t *testing.T) {
