@@ -1,5 +1,8 @@
-postgres:
+new_database:
 	docker run -d --name postgres -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root postgres
+
+existing_database:
+	docker start postgres 
 
 createdb:
 	docker exec -it postgres createdb --username=root --owner=root simple_bank
