@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5"
 	db "learning.com/golang_backend/db/sqlc/repository"
 )
 
@@ -38,6 +37,11 @@ func (server Server) createAccount(ctx *gin.Context) {
 
 	account, err := server.repository.CreateAccount(ctx, arg)
 	if err != nil {
+		errCode := db.ErrorCode(err)
+		if errCode == db.ForeignKeyViolation || errCode == db.UniqueViolation {
+			ctx.JSON(http.StatusForbidden, errorResponse(err))
+			return
+		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
@@ -54,7 +58,7 @@ func (server Server) getAccount(ctx *gin.Context) {
 
 	account, err := server.repository.GetAccount(ctx, path.Id)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
+		if errors.Is(err, db.RecordNotFound) {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}

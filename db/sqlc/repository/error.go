@@ -18,7 +18,7 @@ var ErrUniqueViolation = &pgconn.PgError{
 	Code: UniqueViolation,
 }
 
-func ErrCode(err error) string {
+func ErrorCode(err error) string {
 	var pgErr *pgconn.PgError
 	if errors.As(err, &pgErr) {
 		return pgErr.Code
