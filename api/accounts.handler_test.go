@@ -20,7 +20,8 @@ import (
 )
 
 func TestCreateAccountAPI(t *testing.T) {
-	account := randomAccount(utils.RandomOwner())
+	user, _ := randomUser(t)
+	account := randomAccount(user.Username)
 
 	testCases := []struct {
 		name          string
@@ -307,6 +308,21 @@ func TestListAccountsAPI(t *testing.T) {
 			tc.checkResponse(recorder)
 		})
 	}
+}
+
+func randomUser(t *testing.T) (user db.User, password string) {
+	password = utils.RandomString(6)
+	ownerFullName := utils.RandomOwner()
+	hashedPassword, err := utils.HashPassword(password)
+	require.NoError(t, err)
+
+	user = db.User{
+		Username:       utils.RandomOwner(),
+		HashedPassword: hashedPassword,
+		FullName:       ownerFullName,
+		Email:          utils.OwnerEmail(ownerFullName),
+	}
+	return
 }
 
 func randomAccount(owner string) db.Account {
