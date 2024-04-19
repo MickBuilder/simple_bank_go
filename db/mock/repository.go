@@ -204,19 +204,19 @@ func (mr *MockRepositoryMockRecorder) GetUser(arg0, arg1 any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockRepository)(nil).GetUser), arg0, arg1)
 }
 
-// ListAcounts mocks base method.
-func (m *MockRepository) ListAcounts(arg0 context.Context, arg1 db.ListAcountsParams) ([]db.Account, error) {
+// ListAccounts mocks base method.
+func (m *MockRepository) ListAccounts(arg0 context.Context, arg1 db.ListAccountsParams) ([]db.Account, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListAcounts", arg0, arg1)
+	ret := m.ctrl.Call(m, "ListAccounts", arg0, arg1)
 	ret0, _ := ret[0].([]db.Account)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ListAcounts indicates an expected call of ListAcounts.
-func (mr *MockRepositoryMockRecorder) ListAcounts(arg0, arg1 any) *gomock.Call {
+// ListAccounts indicates an expected call of ListAccounts.
+func (mr *MockRepositoryMockRecorder) ListAccounts(arg0, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAcounts", reflect.TypeOf((*MockRepository)(nil).ListAcounts), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAccounts", reflect.TypeOf((*MockRepository)(nil).ListAccounts), arg0, arg1)
 }
 
 // ListEntries mocks base method.
