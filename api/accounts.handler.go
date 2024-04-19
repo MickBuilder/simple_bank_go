@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"learning.com/golang_backend/auth"
 	db "learning.com/golang_backend/db/sqlc/repository"
 )
 
 type createAccountRequest struct {
-	Owner    string `json:"owner" binding:"required"`
 	Currency string `json:"currency" binding:"required,currency"`
 }
 
@@ -29,8 +29,9 @@ func (server Server) createAccount(ctx *gin.Context) {
 		return
 	}
 
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*auth.Payload)
 	arg := db.CreateAccountParams{
-		Owner:    req.Owner,
+		Owner:    authPayload.Username,
 		Currency: req.Currency,
 		Balance:  0,
 	}
@@ -67,6 +68,13 @@ func (server Server) getAccount(ctx *gin.Context) {
 		return
 	}
 
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*auth.Payload)
+	if account.Owner != authPayload.Username {
+		err := errors.New("account doesn't belong to you")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
 	ctx.JSON(http.StatusOK, account)
 }
 
@@ -77,12 +85,15 @@ func (server Server) listAccounts(ctx *gin.Context) {
 		return
 	}
 
-	arg := db.ListAcountsParams{
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*auth.Payload)
+
+	arg := db.ListAccountsParams{
+		Owner:  authPayload.Username,
 		Offset: params.PageSize * (params.PageId - 1),
 		Limit:  params.PageSize,
 	}
 
-	accounts, err := server.repository.ListAcounts(ctx, arg)
+	accounts, err := server.repository.ListAccounts(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
