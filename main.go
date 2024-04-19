@@ -22,7 +22,10 @@ func main() {
 	}
 
 	repository := db.NewRepository(conn)
-	server := api.NewServer(repository)
+	server, err := api.NewServer(config, repository)
+	if err != nil {
+		log.Fatal("cannot create server:", err)
+	}
 
 	err = server.Start(config.ServerAddress)
 	if err != nil {

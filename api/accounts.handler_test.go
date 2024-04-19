@@ -92,7 +92,7 @@ func TestCreateAccountAPI(t *testing.T) {
 			repo := mockdb.NewMockRepository(ctrl)
 			tc.buildStubs(repo)
 
-			server := NewServer(repo)
+			server := newTestServer(t, repo)
 			recorder := httptest.NewRecorder()
 
 			// Marshal body data to JSON
@@ -180,7 +180,7 @@ func TestGetAccountAPI(t *testing.T) {
 			repo := mockdb.NewMockRepository(ctrl)
 			testCase.buildStubs(repo)
 
-			server := NewServer(repo)
+			server := newTestServer(t, repo)
 			recoder := httptest.NewRecorder()
 			url := fmt.Sprintf("/accounts/%d", testCase.accountID)
 			req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -291,7 +291,7 @@ func TestListAccountsAPI(t *testing.T) {
 			repo := mockdb.NewMockRepository(ctrl)
 			tc.buildStubs(repo)
 
-			server := NewServer(repo)
+			server := newTestServer(t, repo)
 			recorder := httptest.NewRecorder()
 
 			url := "/accounts"
